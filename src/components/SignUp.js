@@ -6,7 +6,7 @@ import { useContext, useState } from "react";
 
 export default function SignUp(){
     const navigate = useNavigate();
-    const { jwt, setJWT } = useContext(AuthContext);
+    const { token, setToken } = useContext(AuthContext);
     const [formInfo, setFormInfo] = useState({ name: '', email: '', password: '' })
 
     function handleForm(e) {
@@ -19,8 +19,8 @@ export default function SignUp(){
         console.log(formInfo);
         const promise = axios.post(`http://localhost:5000/signup`, ({ ...formInfo }));
         promise.then((res) => {
-            setJWT(res.data.token);
-            console.log(jwt);
+            setToken(res.data.token);
+            console.log(token);
             navigate("/signup")
         });
         promise.catch((error) => {

@@ -1,12 +1,10 @@
 import styled from "styled-components";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { AuthContext } from "../contexts/AuthContext";
 import { useContext, useState } from "react";
 
 export default function SignIn() {
     const navigate = useNavigate();
-    const { jwt, setJWT } = useContext(AuthContext);
     const [formInfo, setFormInfo] = useState({ email: '', password: '' })
 
     function handleForm(e) {
@@ -19,8 +17,6 @@ export default function SignIn() {
         console.log(formInfo);
         const promise = axios.post(`http://localhost:5000/signin`, ({ ...formInfo }));
         promise.then((res) => {
-            setJWT(res.data.token);
-            console.log(jwt);
             navigate("/signup")
         });
         promise.catch((error) => {
