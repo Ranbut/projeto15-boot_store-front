@@ -1,22 +1,23 @@
-import GlobalStyle from "./assets/GlobalStyle"
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Cart from './components/Cart.js'
-import Login from './components/Login.js'
+import AuthProvider from "./contexts/AuthContext";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import SignIn from "./components/SignIn";
+import { GlobalStyle } from "./globalStyles";
+import SignUp from "./components/SignUp";
 import Home from "./components/Home/Home.js";
 
-export default function App(){
-  return(
-  <>
-    <BrowserRouter>
+export default function App() {
+  return (
+    <>
       <GlobalStyle />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login/>}/>
-        <Route path="/sign-up" />
-        <Route path="/cart" element={<Cart/>}/>
-        <Route path="/checkout" />
-      </Routes>
-    </BrowserRouter>
-  </>
-  )
+      <BrowserRouter>
+        <AuthProvider>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/signin" element={<SignIn />} />
+            <Route path="/signup" element={<SignUp />} />
+          </Routes>
+        </AuthProvider>
+      </BrowserRouter>
+     </>
+    )
 }
