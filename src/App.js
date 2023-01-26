@@ -4,17 +4,19 @@ import SignIn from "./components/SignIn";
 import { GlobalStyle } from "./globalStyles";
 import SignUp from "./components/SignUp";
 import Header from "./components/Header";
+import Cart from "./components/Cart";
 
 export default function App() {
   return (
     <>
       <GlobalStyle />
-      <Header/>
       <BrowserRouter>
         <AuthProvider>
           <Routes>
+            <Route path="/" element={<Header />} />
             <Route path="/signin" element={<SignIn />} />
             <Route path="/signup" element={<SignUp />} />
+            <Route path="/cart" element={<Cart />} />
           </Routes>
         </AuthProvider>
       </BrowserRouter>

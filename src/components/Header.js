@@ -1,18 +1,19 @@
 import styled from "styled-components";
 import { FaShoppingCart } from "react-icons/fa";
 import { BsPersonFill } from "react-icons/bs";
-
+import { Link } from "react-router-dom";
 
 export default function Header() {
+
   return (
     <Content>
       <h1>BootStore</h1>
       <input type="text" placeholder="O que você procura?" />
-      
+
       <UserArea>
         <PersonIcon />
         <h2>Entre ou cadastre-se</h2>
-        <CartIcon />
+        <Link to={"/cart"}><CartIcon /></Link>
       </UserArea>
     </Content>
   );
@@ -53,7 +54,6 @@ const Content = styled.div`
     font-family: "Open Sans";
     padding: 10px;
   }
-
 `;
 
 const UserArea = styled.div`
