@@ -33,7 +33,7 @@ body {
 body,html{
 	width: 100%;
 	height: 100vh;
-	background-color: #8C11BE;
+	background-color: #e5ebea;
 }
 ol, ul {
 	list-style: none;
