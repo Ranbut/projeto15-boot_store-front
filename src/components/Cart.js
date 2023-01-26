@@ -1,8 +1,83 @@
-import React, { useState } from "react";
+import React, { useEffect, useContext } from "react";
+import { useState } from "react";
 import styled from "styled-components";
+import AuthContext from "../contexts/AuthContext";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 export default function Cart() {
-  const [items, setItems] = useState([]);
+  const { token, items, setItems, price, setPrice } = useContext(AuthContext);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const URL = process.env.REACT_APP_API_URL;
+    const config = { headers: { Authorization: `Bearer ${token}` } };
+    setLoading(true);
+    axios
+      .get(`${URL}/cart`, config)
+      .then((res) => {
+        setItems(res.data);
+        setLoading(false);
+        setPrice(calculateTotalPrice(res.data));
+      })
+      .catch((err) => {
+        setError(err);
+        setLoading(false);
+        alert(err.res.data.message);
+        navigate("/");
+      });
+  }, [token, setItems, setPrice, navigate]);
+
+  const calculateTotalPrice = (items) => {
+    return items.reduce((acc, item) => acc + item.price, 0);
+  };
+
+  const handleRemoveItem = (itemId) => {
+    const URL = process.env.REACT_APP_API_URL;
+    const config = { headers: { Authorization: `Bearer ${token}` } };
+    setLoading(true);
+    axios
+      .delete(`${URL}/cart/${itemId}`, config)
+      .then((res) => {
+        setItems(items.filter((item) => item.id !== itemId));
+        setPrice(
+          calculateTotalPrice(items.filter((item) => item.id !== itemId))
+        );
+        setLoading(false);
+      })
+      .catch((err) => {
+        setError(err);
+        setLoading(false);
+        alert(err.res.data.message);
+      });
+  };
+
+  const handleCheckout = () => {
+    const URL = process.env.REACT_APP_API_URL;
+    const config = { headers: { Authorization: `Bearer ${token}` } };
+    setLoading(true);
+    axios
+      .post(`${URL}/checkout`, { items, price }, config)
+      .then((res) => {
+        setLoading(false);
+        navigate("/checkout");
+      })
+      .catch((err) => {
+        setError(err);
+        setLoading(false);
+        alert(err.res.data.message);
+      });
+  };
+
+  if (loading) {
+    return <p>Carregando...</p>;
+  }
+
+  if (error) {
+    return <p>Error: {error.message}</p>;
+  }
 
   return (
     <Wrapper>
@@ -14,12 +89,14 @@ export default function Cart() {
                 <Item key={item.id}>
                   <ItemName>{item.name}</ItemName>
                   <ItemPrice>{item.price}</ItemPrice>
+                  <RemoveButton onClick={() => handleRemoveItem(item.id)}>
+                    Remover
+                  </RemoveButton>
                 </Item>
               ))}
             </ItemsList>
-            <Total>
-              Total: {items.reduce((acc, item) => acc + item.price, 0)}
-            </Total>
+            <Total>Total: {price}</Total>
+            <CheckoutButton onClick={handleCheckout}>Checkout</CheckoutButton>
           </>
         ) : (
           <EmptyCart>
@@ -48,7 +125,8 @@ const CartContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: rgba(17, 17, 26, 0.1) 0px 8px 24px, rgba(17, 17, 26, 0.1) 0px 16px 56px, rgba(17, 17, 26, 0.1) 0px 24px 80px;
+  box-shadow: rgba(17, 17, 26, 0.1) 0px 8px 24px,
+    rgba(17, 17, 26, 0.1) 0px 16px 56px, rgba(17, 17, 26, 0.1) 0px 24px 80px;
 `;
 
 const ItemsList = styled.ul`
@@ -91,4 +169,32 @@ const EmptyCart = styled.p`
   font-size: 21px;
   color: #333;
   text-align: center;
+`;
+
+const RemoveButton = styled.button`
+  background-color: #ff0000;
+  color: #fafafa;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 15px;
+  font-size: 18px;
+  font-family: "Open Sans";
+  cursor: pointer;
+  &:hover {
+    background-color: #ff3b3b;
+  }
+`;
+
+const CheckoutButton = styled.button`
+  background-color: #564eba;
+  color: #fafafa;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 15px;
+  font-size: 18px;
+  font-family: "Open Sans";
+  cursor: pointer;
+  &:hover {
+    background-color: #826ef0;
+  }
 `;
