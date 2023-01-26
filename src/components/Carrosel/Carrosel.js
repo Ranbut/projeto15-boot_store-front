@@ -5,17 +5,20 @@ Info, Nome, Preco, PrecoPromocao, Container,
 BotaoDireito, BotaoEsquerdo, BotaoAdicionar} from './styles.js'
 import axios from "axios";
 import { useState, useEffect } from "react"
+import { Oval } from 'react-loader-spinner'
 
 export default function Carrosel({type}){
 
 const [produtosCarrosel, setProdutos] = useState([]);
+const [carregado, setCarregado] = useState(false);
 
   useEffect(() => { 
     const requisicao = axios.get(`http://localhost:5000/produtos`, { headers: { 'type': type } });
     requisicao.then((res) => {
         setProdutos(res.data);
+        setCarregado(true);
     });
-    requisicao.catch((res) => { alert(res.response.data.message); });
+    requisicao.catch((res) => { alert(res.response.data.message); setCarregado(false);});
 }, []);
 
 //Tábela de produtos no console
@@ -70,7 +73,18 @@ return(
 <Container>
     <Titulo>{nomeCategoria}</Titulo>
     <CarroselContainer ref={carroselRef}>
-        {produtosCarrosel.map(p => 
+        {!carregado ? <Oval
+  height={80}
+  width={80}
+  color="#5F5AA2"
+  wrapperStyle={{}}
+  wrapperClass=""
+  visible={true}
+  ariaLabel='oval-loading'
+  secondaryColor="#0c0c14"
+  strokeWidth={2}
+  strokeWidthSecondary={2}
+/> : produtosCarrosel.map(p => 
         <div key={p.name}>
             <Item>
                 <Imagem>
@@ -95,7 +109,6 @@ return(
     <BotaoDireito>
         <BsFillArrowRightCircleFill size={40} color='grey' onClick={movaParaDireita} />
     </BotaoDireito>
-
 </Container>
 );
 }
