@@ -2,7 +2,7 @@ import { useRef } from 'react';
 import {BsFillArrowLeftCircleFill, BsFillArrowRightCircleFill} from 'react-icons/bs'
 import {Titulo ,CarroselContainer, Item, Imagem, 
 Info, Nome, Preco, PrecoPromocao, Container, 
-BotaoDireito, BotaoEsquerdo} from './styles.js'
+BotaoDireito, BotaoEsquerdo, BotaoAdicionar} from './styles.js'
 import axios from "axios";
 import { useState, useEffect } from "react"
 
@@ -11,12 +11,16 @@ export default function Carrosel({type}){
 const [produtosCarrosel, setProdutos] = useState([]);
 
   useEffect(() => { 
-    const requisicao = axios.get("http://localhost:5000/produtos", { headers: { 'type': type } });
+    const requisicao = axios.get(`http://localhost:5000/produtos`, { headers: { 'type': type } });
     requisicao.then((res) => {
         setProdutos(res.data);
     });
     requisicao.catch((res) => { alert(res.response.data.message); });
 }, []);
+
+//Tábela de produtos no console
+console.log("Mostre inventário:", type);
+console.table(produtosCarrosel);
 
 const carroselRef = useRef(null);
 
@@ -50,7 +54,13 @@ switch (type){
         nomeCategoria = "Placas de Vídeos";
         break;
     case "cpu":
-        nomeCategoria = "CPU";
+        nomeCategoria = "Processadores";
+        break;
+    case "ram":
+        nomeCategoria = "Mémorias RAM";
+        break;
+    case "ssd":
+        nomeCategoria = "SSD";
         break;
     default:
         nomeCategoria = "Não especificado(a)"
@@ -68,9 +78,12 @@ return(
                 </Imagem>
                 <Info>
                     <Nome>{p.name}</Nome>
-                    <Preco>de <s>R$ {p.price.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</s></Preco>
-                    <PrecoPromocao>para R$ {aplicarPromocao(p.price, p.offer).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</PrecoPromocao>
                 </Info>
+                <span>
+                <Preco>de <s>R$ {p.price.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</s></Preco>
+                <PrecoPromocao>para R$ {aplicarPromocao(p.price, p.offer).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</PrecoPromocao>
+                </span>
+                <BotaoAdicionar>Adicionar ao carrinho</BotaoAdicionar>
             </Item>
         </div>
         )
