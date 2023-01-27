@@ -20,6 +20,7 @@ export default function SignUp(){
         const promise = axios.post(`http://localhost:5000/signup`, ({ ...formInfo }));
         promise.then((res) => {
             setToken(res.data.token);
+            alert("Cadastro realizado com sucesso!");
             console.log(token);
             navigate("/signup")
         });
@@ -59,7 +60,7 @@ export default function SignUp(){
                     focus
                     required
                 />
-                <Button type="submit">Entrar</Button>
+                <Button type="submit">Cadastrar</Button>
                 <GoTo onClick={() => navigate("/signin")}>
                     <p>Já possui cadastro? Sim? </p>
                     <p>Então faça login!</p>
