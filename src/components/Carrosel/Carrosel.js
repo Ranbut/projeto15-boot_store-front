@@ -13,7 +13,7 @@ const [produtosCarrosel, setProdutos] = useState([]);
 const [carregado, setCarregado] = useState(false);
 
   useEffect(() => { 
-    const requisicao = axios.get(`http://localhost:5000/produtos`, { headers: { 'type': type } });
+    const requisicao = axios.get(`http://localhost:5000/produtos`, { params: { 'type': type } });
     requisicao.then((res) => {
         setProdutos(res.data);
         setCarregado(true);
@@ -94,7 +94,7 @@ return(
                     <Nome>{p.name}</Nome>
                 </Info>
                 <span>
-                <Preco>de <s>R$ {p.price.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</s></Preco>
+                <Preco>de <s>{p.price.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</s></Preco>
                 <PrecoPromocao>para R$ {aplicarPromocao(p.price, p.offer).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</PrecoPromocao>
                 </span>
                 <BotaoAdicionar>Adicionar ao carrinho</BotaoAdicionar>
