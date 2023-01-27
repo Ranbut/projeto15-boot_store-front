@@ -2,21 +2,28 @@ import { useRef } from 'react';
 import {BsFillArrowLeftCircleFill, BsFillArrowRightCircleFill} from 'react-icons/bs'
 import {Titulo ,CarroselContainer, Item, Imagem, 
 Info, Nome, Preco, PrecoPromocao, Container, 
-BotaoDireito, BotaoEsquerdo} from './styles.js'
+BotaoDireito, BotaoEsquerdo, BotaoAdicionar} from './styles.js'
 import axios from "axios";
 import { useState, useEffect } from "react"
+import { Oval } from 'react-loader-spinner'
 
 export default function Carrosel({type}){
 
 const [produtosCarrosel, setProdutos] = useState([]);
+const [carregado, setCarregado] = useState(false);
 
   useEffect(() => { 
-    const requisicao = axios.get("http://localhost:5000/produtos", { headers: { 'type': type } });
+    const requisicao = axios.get(`http://localhost:5000/produtos`, { headers: { 'type': type } });
     requisicao.then((res) => {
         setProdutos(res.data);
+        setCarregado(true);
     });
-    requisicao.catch((res) => { alert(res.response.data.message); });
+    requisicao.catch((res) => { alert(res.response.data.message); setCarregado(false);});
 }, []);
+
+//Tábela de produtos no console
+console.log("Mostre inventário:", type);
+console.table(produtosCarrosel);
 
 const carroselRef = useRef(null);
 
@@ -50,7 +57,13 @@ switch (type){
         nomeCategoria = "Placas de Vídeos";
         break;
     case "cpu":
-        nomeCategoria = "CPU";
+        nomeCategoria = "Processadores";
+        break;
+    case "ram":
+        nomeCategoria = "Mémorias RAM";
+        break;
+    case "ssd":
+        nomeCategoria = "SSD";
         break;
     default:
         nomeCategoria = "Não especificado(a)"
@@ -60,7 +73,18 @@ return(
 <Container>
     <Titulo>{nomeCategoria}</Titulo>
     <CarroselContainer ref={carroselRef}>
-        {produtosCarrosel.map(p => 
+        {!carregado ? <Oval
+  height={80}
+  width={80}
+  color="#5F5AA2"
+  wrapperStyle={{}}
+  wrapperClass=""
+  visible={true}
+  ariaLabel='oval-loading'
+  secondaryColor="#0c0c14"
+  strokeWidth={2}
+  strokeWidthSecondary={2}
+/> : produtosCarrosel.map(p => 
         <div key={p.name}>
             <Item>
                 <Imagem>
@@ -68,9 +92,12 @@ return(
                 </Imagem>
                 <Info>
                     <Nome>{p.name}</Nome>
-                    <Preco>de <s>R$ {p.price.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</s></Preco>
-                    <PrecoPromocao>para R$ {aplicarPromocao(p.price, p.offer).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</PrecoPromocao>
                 </Info>
+                <span>
+                <Preco>de <s>R$ {p.price.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</s></Preco>
+                <PrecoPromocao>para R$ {aplicarPromocao(p.price, p.offer).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</PrecoPromocao>
+                </span>
+                <BotaoAdicionar>Adicionar ao carrinho</BotaoAdicionar>
             </Item>
         </div>
         )
@@ -82,7 +109,6 @@ return(
     <BotaoDireito>
         <BsFillArrowRightCircleFill size={40} color='grey' onClick={movaParaDireita} />
     </BotaoDireito>
-
 </Container>
 );
 }

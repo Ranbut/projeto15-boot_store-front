@@ -6,20 +6,35 @@ export const Container = styled.div`
     margin-top: 50px
     width: 80%;
     box-sizing: border-box;
+
+    @media (max-width: 675px) {
+        margin-top: 75px;
+  }
 `
 
 export const Titulo = styled.h4`
-    font-size: 30px;
-    padding-left: 20px;
-    background: #5F5AA2;
-    color: #090909
+  text-align: center;
+  font-size: 30px;
+  padding: 20px 20px;
+  color: #0c0c14;
+  font-weight: 700;
+  border-radius: 40px;
+  background: #5F5AA2;
+  width: 275px;
+  margin-left: 38%;
+  margin-bottom: 10px;
+  @media (max-width: 675px) {
+    margin-left: 5%;
+  }
 `
 
 export const CarroselContainer = styled.div`
     display: flex;
     overflow-x: auto;
     scroll-behavior: smooth;
-    background: #5F5AA2;
+    background: #2d2d30;
+    border-radius:10px;
+    height: 380px;
 
     /*Essas propriedades são para esconder o scroll*/
     -ms-overflow-style: none;  /* Em Edge */
@@ -28,12 +43,23 @@ export const CarroselContainer = styled.div`
      -webkit-appearance: none; /* Em Chrome, Safari e Opera */
   }
     /*Caso remova, lembre de tirar todas - Vitor*/
+
+    @media (max-width: 675px) {
+    /*Essas propriedades são para esconder o scroll*/
+    -ms-overflow-style: auto;  /* Em Edge */
+    scrollbar-width: auto;  /* Em Firefox */
+    &::-webkit-scrollbar {
+     -webkit-appearance: auto; /* Em Chrome, Safari e Opera */
+  }
+}
+    /*Caso remova, lembre de tirar todas - Vitor*/
 `
 
 export const Item = styled.div`
-    background: #FFFFFF;
+    background: #e5ebea;
     border-radius: 16px;
     margin-left: 10px;
+    margin-top: 15px;
     transition: all .5s ease;
     overflow: hidden;
     box-shadow: 8px 14px 38px rgba(39,44,49,.06), 1px 3px 8px rgba(39,44,49,.03);
@@ -60,7 +86,7 @@ export const Info = styled.div`
     flex-direction: column;
     font-size: 1.2rem;
     margin: 10px 10px;
-    height: 120px ;
+    height: 120px;
 `
 
 export const Nome = styled.span`
@@ -71,29 +97,65 @@ export const Nome = styled.span`
 `
 
 export const Preco = styled.span`
+    display: inline-block;
+    position: relative;
     color: red;
     text-align: center;
     font-size: 0.8rem;
     margin-top: 10px;
+    left: 50px;
+    top: -50px;
 `
 
 export const PrecoPromocao = styled.span`
-    margin-top: 10px;
-    background: #ff7e3b;
-    color: rgb(51, 51, 51);
-    font-size: 16px;
-    font-weight: 700;
-    border-radius:10px;
-    text-align: center;
+display: inline-block;
+position: relative;
+left: 20px;
+top: -40px;
+background: #ff7e3b;
+color: rgb(51,51,51);
+font-size: 16px;
+font-weight: 700;
+border-radius: 10px;
+text-align: center;
+width: 160px;
+height: 20px;
 `
 
 export const BotaoDireito = styled.span`
     position: relative;
-    left: 94%;
-    bottom: 170px
+    left: 97%;
+    bottom: 170px;
+    cursor: pointer;
+    @media (max-width: 675px) {
+        display: none;
+  }
 `
 
 export const BotaoEsquerdo = styled.span`
     position: relative;
+    right: 4%;
     bottom: 170px;
+    cursor: pointer;
+    @media (max-width: 675px) {
+        display: none;
+  }
+`
+export const BotaoAdicionar = styled.button`
+    position: relative;
+    left: 14%;
+    bottom: 5%;
+    background: #5F5AA2;
+    color: #0c0c14;
+    border: none;
+    border-radius: 10px;
+    font-weight: 600;
+
+    transition: background 1s, color 2s;
+
+    &:hover{
+        background: #3D33BD;
+        color: #ffffff;
+        cursor: pointer;
+    }
 `

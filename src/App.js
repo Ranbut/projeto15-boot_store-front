@@ -6,6 +6,7 @@ import SignUp from "./components/SignUp";
 import Home from "./components/Home/Home.js";
 import Header from "./components/Header";
 import Cart from "./components/Cart";
+import Checkout from './components/Checkout/Checkout.js'
 
 export default function App() {
   return (
@@ -19,6 +20,7 @@ export default function App() {
             <Route path="/signin" element={<SignIn />} />
             <Route path="/signup" element={<SignUp />} />
             <Route path="/cart" element={<Cart />} />
+            <Route path="/checkout" element={<Checkout />}/>
           </Routes>
         </AuthProvider>
       </BrowserRouter>
