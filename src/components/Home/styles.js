@@ -4,7 +4,7 @@ import background from "../../assets/background.jpg"
 export const HomeContainer = styled.div`
     background-image: url(${background});
     width: 100%;
-    padding: 50px 10%;
+    padding: 125px 10%;
     font-family: 'Open Sans', sans-serif;
 `;
 

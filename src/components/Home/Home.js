@@ -1,11 +1,13 @@
 import Carrosel from "../Carrosel/Carrosel.js";
 import { HomeContainer, RedeSociais, Rodape, RodapeEndereco, RodapePerfil, RodapeSlogan } from "./styles.js";
 import { BsYoutube, BsFacebook, BsInstagram, BsTwitter } from "react-icons/bs";
+import Header from "../Header.js";
 
 //Home será a route "/" e onde ficara os produtos
 export default function Home(){
     return(
     <>
+        <Header/>
         <HomeContainer>
             <Carrosel type={"motherboard"}/>
             <Carrosel type={"power-supply"}/>
