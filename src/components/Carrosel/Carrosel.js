@@ -21,10 +21,6 @@ const [carregado, setCarregado] = useState(false);
     requisicao.catch((res) => { alert(res.response.data.message); setCarregado(false);});
 }, []);
 
-//Tábela de produtos no console
-console.log("Mostre inventário:", type);
-console.table(produtosCarrosel);
-
 const carroselRef = useRef(null);
 
 function movaParaEsquerda(e){

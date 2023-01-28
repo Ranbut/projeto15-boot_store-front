@@ -3,17 +3,47 @@ import { FaShoppingCart } from "react-icons/fa";
 import { BsPersonFill } from "react-icons/bs";
 import { Link, useNavigate } from "react-router-dom";
 import { BsSearch } from "react-icons/bs"
-import { useState } from "react";
+import { BiLogOut } from "react-icons/bi"
+import { useEffect, useState } from "react";
 
 export default function Header() {
 
+  const [user, setUser] = useState();
   const navigate = useNavigate();
   const [produtoName, setProdutosName] = useState("");
+
+  useEffect(() => {
+    const loggedInUser = localStorage.getItem("userSession");
+    if (loggedInUser) {
+      const foundUser = JSON.parse(localStorage.getItem("userSession"));
+      setUser(foundUser);
+    }
+  }, []);
+
+  console.log(user);
+
+  const handleLogout = () => {
+    setUser();
+    localStorage.clear();
+  };
 
   const handleSearchKeyDown = (e) => {
     if (e.key === 'Enter') {
       navigate(`/search?type=&name=${produtoName}`);
     }
+  }
+
+  function renderLoginStatus(){
+    if(!user)
+      return(<h2><Link to={"/signin"}>Entre</Link> ou <Link to={"/signup"}>cadastre-se</Link></h2>)
+    else
+      return(
+      <>
+        <h2>
+          Seja bem-vindo, {user.user.name}
+        </h2>
+        <LogOutIcon onClick={handleLogout}/>
+      </>);
   }
 
   return (
@@ -25,7 +55,7 @@ export default function Header() {
       </div>
       <UserArea>
         <PersonIcon />
-        <h2><Link to={"/signin"}>Entre</Link> ou <Link to={"/signup"}>cadastre-se</Link></h2>
+        {renderLoginStatus()}
         <Link to={"/cart"}><CartIcon /></Link>
       </UserArea>
     </Content>
@@ -90,11 +120,18 @@ const PersonIcon = styled(BsPersonFill)`
   color: #fafafa;
   font-size: 25px;
 `;
+
 const CartIcon = styled(FaShoppingCart)`
   color: #fafafa;
   font-size: 25px;
   position: relative;
   left: 100px;
+  cursor: pointer;
+`;
+
+const LogOutIcon = styled(BiLogOut)`
+  color: #fafafa;
+  font-size: 25px;
   cursor: pointer;
 `;
 

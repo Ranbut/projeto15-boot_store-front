@@ -1,7 +1,8 @@
 import styled from "styled-components";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { useContext, useState } from "react";
+import { useState } from "react";
+import { LogIn } from "react-ionicons";
 
 export default function SignIn() {
     const navigate = useNavigate();
@@ -17,7 +18,9 @@ export default function SignIn() {
         console.log(formInfo);
         const promise = axios.post(`http://localhost:5000/signin`, ({ ...formInfo }));
         promise.then((res) => {
-            navigate("/")
+            const objectData = res.data;
+            localStorage.setItem('userSession', JSON.stringify(objectData));
+            navigate("/");
         });
         promise.catch((error) => {
             console.log(error);
