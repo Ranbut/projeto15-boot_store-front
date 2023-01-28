@@ -1,8 +1,9 @@
 import { SearchContainer, SearchFilter, FilterTitle, ComponentsSelection, SearchResultContainer, Item, Imagem, Info, Nome, Preco, PrecoPromocao, FilterName, ButtonSearch, BotaoComprar } from "./style.js";
 import Header from "../Header.js";
+import Rodape from "../Rodape.js";
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 export default function Search(){
 
@@ -10,10 +11,12 @@ export default function Search(){
     const [produtoName, setProdutosName] = useState("");
     const [produtoType, setProdutoType] = useState("");
 
+    const [searchParams, setSearchParams] = useSearchParams();
+
     const navigate = useNavigate();
 
     useEffect(() => { 
-      const requisicao = axios.get(`http://localhost:5000/produtos`);
+      const requisicao = axios.get(`http://localhost:5000/produtos`, { params: { 'type': searchParams.get("type"), 'name': searchParams.get("name") } });
       requisicao.then((res) => {
           setProdutos(res.data);
       });
@@ -46,7 +49,7 @@ export default function Search(){
                 </FilterName>
                 <FilterTitle>Componentes</FilterTitle>
                 <ComponentsSelection>
-                  <input type="radio" value="all" name="component" onClick={() => setProdutoType("")} /> Todos
+                  <input type="radio" value="all" name="component" onClick={() => setProdutoType("")} checked /> Todos
                     <input type="radio" value="motherboard" name="component" onClick={() => setProdutoType("motherboard")} /> Placa mãe
                     <input type="radio" value="power-supply" name="component" onClick={() => setProdutoType("power-supply")} /> Fonte
                     <input type="radio" value="cpu" name="component" onClick={() => setProdutoType("cpu")} /> Processador
@@ -72,6 +75,7 @@ export default function Search(){
         )}
             </SearchResultContainer>
         </SearchContainer>
+        <Rodape />
     </>
     );
 }

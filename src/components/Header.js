@@ -1,19 +1,26 @@
 import styled from "styled-components";
 import { FaShoppingCart } from "react-icons/fa";
 import { BsPersonFill } from "react-icons/bs";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { BsSearch } from "react-icons/bs"
 import { useState } from "react";
 
 export default function Header() {
 
+  const navigate = useNavigate();
   const [produtoName, setProdutosName] = useState("");
+
+  const handleSearchKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      navigate(`/search?type=&name=${produtoName}`);
+    }
+  }
 
   return (
     <Content>
       <h1><Link to={"/"}>BootStore</Link></h1>
       <div>
-        <input type="text" placeholder="O que você procura?" onChange={e => setProdutosName(e.target.value)} />
+        <input type="text" placeholder="O que você procura?" onChange={e => setProdutosName(e.target.value)} onKeyDown={handleSearchKeyDown} />
         <Link to={`/search?type=&name=${produtoName}`}><SearchIcon/></Link>
       </div>
       <UserArea>
