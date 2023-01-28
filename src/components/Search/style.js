@@ -15,6 +15,7 @@ export const SearchFilter = styled.div`
     width: 25%;
     border-radius: 40px;
     justify-content: center;
+    height: 460px;
 `
 
 export const FilterName = styled.div`
