@@ -33,8 +33,22 @@ export default function Search(){
       requisicao.catch((res) => { alert(res.response.data.message);});
     }
 
+    function renderPrice(price, offer){
+        if(offer === 0){
+            return(<PrecoPromocao>{price.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</PrecoPromocao>)
+        }
+        else{
+            return(
+            <>
+                <Preco>de <s>{price.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</s></Preco>
+                <PrecoPromocao>para R$ {aplicarPromocao(price, offer).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</PrecoPromocao>
+            </>
+            )
+        }
+    }
+    
     const aplicarPromocao = (price, offer) => {
-        const result = price * (offer / 100);
+        const result = price - (price * (offer / 100));
         return result.toFixed(2);
     }
 
@@ -66,8 +80,7 @@ export default function Search(){
                     <Imagem><img src={p.image} alt={p.name}/></Imagem>
                     <Info>
                         <Nome>{p.name}</Nome>
-                        <Preco>de <s>{p.price.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</s></Preco>
-                        <PrecoPromocao>para R$ {aplicarPromocao(p.price, p.offer).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</PrecoPromocao>
+                        {renderPrice(p.price, p.offer)}
                         <BotaoComprar>Adicionar ao carrinho</BotaoComprar>
                     </Info>
                 </Item>
