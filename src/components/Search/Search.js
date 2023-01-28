@@ -49,7 +49,7 @@ export default function Search(){
                 </FilterName>
                 <FilterTitle>Componentes</FilterTitle>
                 <ComponentsSelection>
-                  <input type="radio" value="all" name="component" onClick={() => setProdutoType("")} checked /> Todos
+                  <input type="radio" value="all" name="component" onClick={() => setProdutoType("")} defaultChecked={true} /> Todos
                     <input type="radio" value="motherboard" name="component" onClick={() => setProdutoType("motherboard")} /> Placa mãe
                     <input type="radio" value="power-supply" name="component" onClick={() => setProdutoType("power-supply")} /> Fonte
                     <input type="radio" value="cpu" name="component" onClick={() => setProdutoType("cpu")} /> Processador
