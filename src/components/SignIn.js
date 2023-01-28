@@ -17,7 +17,7 @@ export default function SignIn() {
         console.log(formInfo);
         const promise = axios.post(`http://localhost:5000/signin`, ({ ...formInfo }));
         promise.then((res) => {
-            navigate("/signup")
+            navigate("/")
         });
         promise.catch((error) => {
             console.log(error);
