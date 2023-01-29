@@ -20,6 +20,8 @@ export default function SignIn() {
       .then((res) => {
         setToken(res.data.token);
         setUserInfo(res.data.user);
+        const objectData = res.data;
+        localStorage.setItem('userSession', JSON.stringify(objectData));
 
         Swal.fire({
           title: `Olá, ${userInfo.name}!`,
