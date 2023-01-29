@@ -1,8 +1,8 @@
 import React, { useEffect, useContext } from "react";
 import { useState } from "react";
 import styled from "styled-components";
-import AuthContext from "../contexts/AuthContext";
 import axios from "axios";
+import { AuthContext } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 
 export default function Cart() {
@@ -82,7 +82,11 @@ export default function Cart() {
   return (
     <Wrapper>
       <CartContainer>
-        {items.length > 0 ? (
+        {items.length === 0 ? (
+          <EmptyCart>
+            Carrinho vazio! Você ainda não possui itens no seu carrinho.
+          </EmptyCart>
+        ) : (
           <>
             <ItemsList>
               {items.map((item) => (
@@ -98,10 +102,6 @@ export default function Cart() {
             <Total>Total: {price}</Total>
             <CheckoutButton onClick={handleCheckout}>Checkout</CheckoutButton>
           </>
-        ) : (
-          <EmptyCart>
-            Carrinho vazio! Você ainda não possui itens no seu carrinho.
-          </EmptyCart>
         )}
       </CartContainer>
     </Wrapper>

@@ -2,8 +2,8 @@ import styled from "styled-components";
 
 export const Container = styled.div`
     border-radius: 16px;
-    justify-content: center
-    margin-top: 50px
+    justify-content: center;
+    margin-top: 50px;
     width: 80%;
     box-sizing: border-box;
 
