@@ -6,7 +6,7 @@ import { AuthContext } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 
 export default function Cart() {
-  const { token, items, setItems, price, setPrice } = useContext(AuthContext);
+  const { token, produtosCarrosel, setProdutos } = useContext(AuthContext);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
@@ -18,9 +18,8 @@ export default function Cart() {
     axios
       .get(`${URL}/cart`, config)
       .then((res) => {
-        setItems(res.data);
+        setProdutos(res.data);
         setLoading(false);
-        setPrice(calculateTotalPrice(res.data));
       })
       .catch((err) => {
         setError(err);
@@ -28,11 +27,7 @@ export default function Cart() {
         alert(err.res.data.message);
         navigate("/");
       });
-  }, [token, setItems, setPrice, navigate]);
-
-  const calculateTotalPrice = (items) => {
-    return items.reduce((acc, item) => acc + item.price, 0);
-  };
+  }, [token, navigate, setProdutos]);
 
   const handleRemoveItem = (itemId) => {
     const URL = process.env.REACT_APP_API_URL;
@@ -41,10 +36,7 @@ export default function Cart() {
     axios
       .delete(`${URL}/cart/${itemId}`, config)
       .then((res) => {
-        setItems(items.filter((item) => item.id !== itemId));
-        setPrice(
-          calculateTotalPrice(items.filter((item) => item.id !== itemId))
-        );
+        setProdutos(produtosCarrosel.filter((item) => item.id !== itemId));
         setLoading(false);
       })
       .catch((err) => {
@@ -59,7 +51,7 @@ export default function Cart() {
     const config = { headers: { Authorization: `Bearer ${token}` } };
     setLoading(true);
     axios
-      .post(`${URL}/checkout`, { items, price }, config)
+      .post(`${URL}/checkout`, { produtosCarrosel }, config)
       .then((res) => {
         setLoading(false);
         navigate("/checkout");
@@ -82,15 +74,16 @@ export default function Cart() {
   return (
     <Wrapper>
       <CartContainer>
-        {items.length === 0 ? (
+        {produtosCarrosel.length === 0 ? (
           <EmptyCart>
             Carrinho vazio! Você ainda não possui itens no seu carrinho.
           </EmptyCart>
         ) : (
           <>
             <ItemsList>
-              {items.map((item) => (
+              {produtosCarrosel.map((item) => (
                 <Item key={item.id}>
+                  <ItemPic>{produtosCarrosel.image}</ItemPic>
                   <ItemName>{item.name}</ItemName>
                   <ItemPrice>{item.price}</ItemPrice>
                   <RemoveButton onClick={() => handleRemoveItem(item.id)}>
@@ -99,7 +92,7 @@ export default function Cart() {
                 </Item>
               ))}
             </ItemsList>
-            <Total>Total: {price}</Total>
+            <Total>Total: {Item.price}</Total>
             <CheckoutButton onClick={handleCheckout}>Checkout</CheckoutButton>
           </>
         )}
@@ -141,6 +134,12 @@ const Item = styled.li`
   align-items: center;
   padding: 10px;
   border-bottom: 1px solid #ccc;
+`;
+
+const ItemPic = styled.img`
+  width: 25px;
+  height: 30px;
+  border-radius: 50%;
 `;
 
 const ItemName = styled.span`
