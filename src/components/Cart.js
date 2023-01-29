@@ -73,7 +73,7 @@ export default function Cart() {
 
   return (
     <Wrapper>
-      <CartContainer>
+<CartContainer>
         {produtosCarrosel.length === 0 ? (
           <EmptyCart>
             Carrinho vazio! Você ainda não possui itens no seu carrinho.
@@ -92,11 +92,16 @@ export default function Cart() {
                 </Item>
               ))}
             </ItemsList>
-            <Total>Total: {Item.price}</Total>
+            <Total>
+              Total: {produtosCarrosel.length === 1
+                ? produtosCarrosel[0].price
+                : produtosCarrosel.reduce((acc, item) => acc + item.price, 0)}
+            </Total>
             <CheckoutButton onClick={handleCheckout}>Checkout</CheckoutButton>
           </>
         )}
       </CartContainer>
+
     </Wrapper>
   );
 }
