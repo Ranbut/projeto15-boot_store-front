@@ -16,7 +16,7 @@ export default function Search(){
     const navigate = useNavigate();
 
     useEffect(() => { 
-      const requisicao = axios.get(`http://localhost:5000/produtos`, { params: { 'type': searchParams.get("type"), 'name': searchParams.get("name") } });
+      const requisicao = axios.get(`${process.env.REACT_APP_API_URL}/produtos`, { params: { 'type': searchParams.get("type"), 'name': searchParams.get("name") } });
       requisicao.then((res) => {
           setProdutos(res.data);
       });
@@ -25,7 +25,7 @@ export default function Search(){
 
 
     function Buscar(){
-      const requisicao = axios.get(`http://localhost:5000/produtos`, { params: { 'type': produtoType, 'name': produtoName } });
+      const requisicao = axios.get(`${process.env.REACT_APP_API_URL}/produtos`, { params: { 'type': produtoType, 'name': produtoName } });
       requisicao.then((res) => {
           navigate(`/search/?type=${produtoType}&name=${produtoName}`)
           setProdutos(res.data);

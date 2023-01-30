@@ -39,11 +39,8 @@ export default function Carrosel({ type }) {
       });
   };
   
-
   useEffect(() => {
-    const requisicao = axios.get(`http://localhost:5000/produtos`, {
-      params: { type: type },
-    });
+    const requisicao = axios.get(`${process.env.REACT_APP_API_URL}/produtos`, { params: { 'type': type } });
     requisicao.then((res) => {
       setProdutos(res.data);
       setCarregado(true);
