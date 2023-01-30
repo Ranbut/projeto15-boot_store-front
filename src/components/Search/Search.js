@@ -1,19 +1,33 @@
 import { SearchContainer, SearchFilter, FilterTitle, ComponentsSelection, SearchResultContainer, Item, Imagem, Info, Nome, Preco, PrecoPromocao, FilterName, ButtonSearch, BotaoComprar } from "./style.js";
 import Header from "../Header.js";
 import Rodape from "../Rodape.js";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import { AuthContext } from "../../contexts/AuthContext.js";
 
 export default function Search(){
 
-    const [produtosPesquisa, setProdutos] = useState([]);
+    const { token ,produtosPesquisa, setProdutos} = useContext(AuthContext);
     const [produtoName, setProdutosName] = useState("");
     const [produtoType, setProdutoType] = useState("");
 
     const [searchParams, setSearchParams] = useSearchParams();
 
     const navigate = useNavigate();
+
+    const handleAddToCart = (image, name, price) => {
+        const URL = process.env.REACT_APP_API_URL;
+        const config = { headers: { Authorization: `Bearer ${token}` } };
+        axios
+          .post(`${URL}/cart`, { image, name, price }, config)
+          .then((res) => {
+            setProdutos([...produtosPesquisa, res.data]);
+          })
+          .catch((err) => {
+            alert(err.res.data.message);
+          });
+      };
 
     useEffect(() => { 
       const requisicao = axios.get(`${process.env.REACT_APP_API_URL}/produtos`, { params: { 'type': searchParams.get("type"), 'name': searchParams.get("name") } });
@@ -81,7 +95,7 @@ export default function Search(){
                     <Info>
                         <Nome>{p.name}</Nome>
                         {renderPrice(p.price, p.offer)}
-                        <BotaoComprar>Adicionar ao carrinho</BotaoComprar>
+                        <BotaoComprar onClick={() => handleAddToCart(p.image, p.name, p.price)}>Adicionar ao carrinho</BotaoComprar>
                     </Info>
                 </Item>
             </div>
